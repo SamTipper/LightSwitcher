@@ -91,7 +91,7 @@ async def setbrightness(ctx, brightness):
     if success:
         await ctx.respond(f"Changing the light brightness to {brightness}%")
     else:
-        await ctx.respond("There was an error while changing the light brightness.")
+        await ctx.respond(f"There was an error while changing the light brightness.")
 
 
 @client.slash_command()

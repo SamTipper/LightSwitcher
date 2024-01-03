@@ -35,7 +35,7 @@ def colour_change_body(
 
         else:
             R, G, B = colors_dict[colour]
-            cmd = {"name": "turn", "value": {"r": R, "g": G, "b": B}}
+            cmd = {"name": "color", "value": {"r": R, "g": G, "b": B}}
 
     elif rgb:
         R, G, B = rgb
@@ -43,12 +43,11 @@ def colour_change_body(
         if all(rgb) == 0:
             cmd = {"name": "turn", "value": "off"}
         else:
-            cmd = {"name": "turn", "value": {"r": R, "g": G, "b": B}}
+            cmd = {"name": "color", "value": {"r": R, "g": G, "b": B}}
 
     else:
         R, G, B = 255, 255, 255
-        cmd = {"name": "turn", "value": {"r": R, "g": G, "b": B}}
-        
+        cmd = {"name": "color", "value": {"r": R, "g": G, "b": B}}
 
     request_body = {
         "device": device_mac,
@@ -78,7 +77,12 @@ def PUT(api_key: str, request_body: str) -> bool:
         data=dumps(request_body),
         timeout=15
     )
-    return request.status_code == 200
+
+    if request.status_code == 200:
+        return True
+    else:
+        print(request.json())
+        return False
 
 
 def all_colours() -> list:
