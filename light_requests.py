@@ -3,6 +3,7 @@ from json import dumps
 
 colors_dict = {
     "off": (0, 0, 0),
+    "on": (0, 0, 0),
     "white": (255, 255, 255),
     "red": (255, 0, 0),
     "green": (0, 255, 0),
@@ -28,19 +29,31 @@ def colour_change_body(
     if colour:
         if colour not in colors_dict:
             return None
+        
+        elif colour == "off" or colour == "on":
+            cmd = {"name": "turn", "value": colour}
 
-        R, G, B = colors_dict[colour]
+        else:
+            R, G, B = colors_dict[colour]
+            cmd = {"name": "turn", "value": {"r": R, "g": G, "b": B}}
 
     elif rgb:
         R, G, B = rgb
 
+        if all(rgb) == 0:
+            cmd = {"name": "turn", "value": "off"}
+        else:
+            cmd = {"name": "turn", "value": {"r": R, "g": G, "b": B}}
+
     else:
         R, G, B = 255, 255, 255
+        cmd = {"name": "turn", "value": {"r": R, "g": G, "b": B}}
+        
 
     request_body = {
         "device": device_mac,
         "model": model_num,
-        "cmd": {"name": "color", "value": {"r": R, "g": G, "b": B}},
+        "cmd": cmd,
     }
 
     return request_body
@@ -63,7 +76,7 @@ def PUT(api_key: str, request_body: str) -> bool:
         "https://developer-api.govee.com/v1/devices/control",
         headers=params,
         data=dumps(request_body),
-        timeout=60
+        timeout=15
     )
     return request.status_code == 200
 
