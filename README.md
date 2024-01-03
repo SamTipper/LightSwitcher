@@ -32,7 +32,7 @@ I plan to add more commands in the future, feel free to contribute to this proje
 
 ## Limitations:
 The Govee API has a few limitations:
-1. 10,000 API requests per day
-2. 10 API requests per minute
+1. 10,000 API requests per day.
+2. 10 API requests per minute.
 
 I have added individual 60-second cooldowns for each command, this ensures that you shouldn't get anywhere near the rate limit within a minute or day. This of course can be changed in the `main.py` file, but I highly recommend that you don't.
