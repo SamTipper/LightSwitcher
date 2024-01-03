@@ -17,13 +17,17 @@ colors_dict = {
     "turquoise": (64, 224, 208),
     "brown": (165, 42, 42),
     "teal": (0, 128, 128),
-    "lavender": (230, 230, 250)
+    "lavender": (230, 230, 250),
 }
 
-def colour_change_body(device_mac: str, model_num: str, colour: tuple = None, rgb: tuple = None) -> dict | None:
+
+def colour_change_body(
+    device_mac: str, model_num: str, colour: tuple = None, rgb: tuple = None
+) -> dict | None:
+    
     if colour:
-        if not colour in colors_dict:
-            return
+        if colour not in colors_dict:
+            return None
 
         R, G, B = colors_dict[colour]
 
@@ -36,15 +40,8 @@ def colour_change_body(device_mac: str, model_num: str, colour: tuple = None, rg
     request_body = {
         "device": device_mac,
         "model": model_num,
-        "cmd": {
-            "name": "color",
-            "value": {
-                "r": R,
-                "g": G,
-                "b": B
-            }
-        }
-	}
+        "cmd": {"name": "color", "value": {"r": R, "g": G, "b": B}},
+    }
 
     return request_body
 
@@ -53,24 +50,23 @@ def brightness_change_body(device_mac: str, model_num: str, brightness: int) -> 
     request_body = {
         "device": device_mac,
         "model": model_num,
-        "cmd": {
-			"name": "brightness",
-			"value": brightness
-        }
-	}
-
-    return request_body
-    
-
-def PUT(api_key: str, request_body: str) -> bool:
-    params = {
-        "Govee-API-Key": api_key,
-        "Content-Type":  "application/json"
+        "cmd": {"name": "brightness", "value": brightness},
     }
 
-    request = requests.put("https://developer-api.govee.com/v1/devices/control", headers=params, data=dumps(request_body))
-    return True if request.status_code == 200 else False
-    
+    return request_body
+
+
+def PUT(api_key: str, request_body: str) -> bool:
+    params = {"Govee-API-Key": api_key, "Content-Type": "application/json"}
+
+    request = requests.put(
+        "https://developer-api.govee.com/v1/devices/control",
+        headers=params,
+        data=dumps(request_body),
+        timeout=60
+    )
+    return request.status_code == 200
+
 
 def all_colours() -> list:
     return colors_dict.keys()

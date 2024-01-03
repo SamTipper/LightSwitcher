@@ -3,21 +3,27 @@ from pathlib import Path
 
 
 def get_tokens() -> str:
-    api_key   = input("Please enter your Govee API key:\n").strip()
+    api_key = input("Please enter your Govee API key:\n").strip()
     bot_token = input("Please enter your Discord bot token:\n").strip()
     return api_key, bot_token
 
 
 def get_devices(api_key: str) -> list | None:
-    response = requests.get("https://developer-api.govee.com/v1/devices", headers={"Govee-API-Key": api_key})
+    response = requests.get(
+        "https://developer-api.govee.com/v1/devices", headers={"Govee-API-Key": api_key}
+    )
 
     if response.status_code == 401:
-        print(f"There was an error retriving your device information, here is the error: {response.json()['message']}")
+        print(
+            f"There was an error retriving your device information, here is the error: {response.json()['message']}"
+        )
         return
-    
+
     response = response.json()
 
-    filtered_devices = [device for device in response['data']['devices'] if 'deviceName' in device]
+    filtered_devices = [
+        device for device in response["data"]["devices"] if "deviceName" in device
+    ]
     return filtered_devices
 
 
@@ -30,12 +36,12 @@ def list_devices(filtered_devices: list) -> dict | None:
     chosen_device = input()
     if not chosen_device.strip().isdigit():
         return
-    
+
     chosen_device_index = int(chosen_device.strip())
 
     if chosen_device_index not in range(0, len(filtered_devices)):
         return
-    
+
     return filtered_devices[chosen_device_index]
 
 
@@ -51,9 +57,11 @@ def main() -> None:
     filtered_devices = get_devices(api_key)
 
     if not filtered_devices:
-        print("No devices associated to your API key found... Please make sure your light is properly set up, or address error messages if you have any. PROGRAM TERMINATING...\n")
+        print(
+            "No devices associated to your API key found... Please make sure your light is properly set up, or address error messages if you have any. PROGRAM TERMINATING...\n"
+        )
         return
-    
+
     elif len(filtered_devices) > 1:
         chosen_device = list_devices(filtered_devices)
 
@@ -66,7 +74,7 @@ def main() -> None:
         chosen_device = list_devices(filtered_devices)
 
     create_env_file(api_key, bot_token, chosen_device)
-    print(".env file created and setup is complete. Please run \"main.py\" to begin.\n")
+    print('.env file created and setup is complete. Please run "main.py" to begin.\n')
 
 
 if __name__ == "__main__":

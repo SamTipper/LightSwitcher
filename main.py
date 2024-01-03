@@ -7,10 +7,10 @@ import light_requests
 
 load_dotenv()
 
-API_KEY   = environ['API_KEY']
-MAC_ADDR  = environ['DEVICE_MAC']
-MODEL_NUM = environ['DEVICE_MODEL_NUM']
-BOT_TOKEN = environ['BOT_TOKEN']
+API_KEY = environ["API_KEY"]
+MAC_ADDR = environ["DEVICE_MAC"]
+MODEL_NUM = environ["DEVICE_MODEL_NUM"]
+BOT_TOKEN = environ["BOT_TOKEN"]
 
 intents = discord.Intents.default()
 client = discord.Bot(intents=intents)
@@ -25,11 +25,15 @@ async def on_application_command_error(ctx, error):
 @client.slash_command()
 @cooldown(1, 60, BucketType.guild)
 async def setcolour(ctx, colour):
-    request_body = light_requests.colour_change_body(MAC_ADDR, MODEL_NUM, colour=colour.lower())
+    request_body = light_requests.colour_change_body(
+        MAC_ADDR, MODEL_NUM, colour=colour.lower()
+    )
 
     if not request_body:
         await ctx.respond(f"{colour.title()} is not a valid colour.")
-        await ctx.send(f"All colours:\n{', '.join(light_requests.all_colours()).title()}")
+        await ctx.send(
+            f"All colours:\n{', '.join(light_requests.all_colours()).title()}"
+        )
         return
 
     success = light_requests.PUT(API_KEY, request_body)
@@ -37,7 +41,9 @@ async def setcolour(ctx, colour):
     if success:
         await ctx.respond(f"Changing the light colour to {colour.title()}.")
     else:
-        await ctx.respond(f"There was an error while changing the light colour to {colour.title()}.")
+        await ctx.respond(
+            f"There was an error while changing the light colour to {colour.title()}."
+        )
 
 
 @client.slash_command()
@@ -59,7 +65,9 @@ async def setrgb(ctx, r, g, b):
     if success:
         await ctx.respond(f"Changing the light colour to R: {r}, G: {g}, B: {b}.")
     else:
-        await ctx.respond(f"There was an error while changing the light colour to R: {r}, G: {g}, B: {b}.")
+        await ctx.respond(
+            f"There was an error while changing the light colour to R: {r}, G: {g}, B: {b}."
+        )
 
 
 @client.slash_command()
@@ -71,26 +79,31 @@ async def setbrightness(ctx, brightness):
 
     brightness = int(brightness.strip().replace("%", ""))
 
-    if not brightness in range(1, 101):
+    if brightness not in range(1, 101):
         await ctx.respond("The brightness value must be between 1-100.")
         return
 
-    request_body = light_requests.brightness_change_body(MAC_ADDR, MODEL_NUM, brightness)
+    request_body = light_requests.brightness_change_body(
+        MAC_ADDR, MODEL_NUM, brightness
+    )
     success = light_requests.PUT(API_KEY, request_body)
 
     if success:
         await ctx.respond(f"Changing the light brightness to {brightness}%")
     else:
-        await ctx.respond(f"There was an error while changing the light brightness.")
+        await ctx.respond("There was an error while changing the light brightness.")
 
 
 @client.slash_command()
 async def allcolours(ctx):
-    await ctx.respond(f"All colours:\n{', '.join(light_requests.all_colours()).title()}")
+    await ctx.respond(
+        f"All colours:\n{', '.join(light_requests.all_colours()).title()}"
+    )
 
 
 @client.event
 async def on_ready():
-    print(f'We have logged in as {client.user}')
+    print(f"We have logged in as {client.user}")
+
 
 client.run(BOT_TOKEN)
