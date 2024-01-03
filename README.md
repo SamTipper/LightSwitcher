@@ -22,3 +22,17 @@
     - Use Slash Commands
 
 If you spot any bugs or anything that seems wrong, please feel free to raise an issue.
+
+## Commands:
+1. `/setcolour [colour]`
+2. `/setrgb [r], [g], [b]`
+3. `/setbrightness [1-100]`
+
+I plan to add more commands in the future, feel free to contribute to this project to bulk out its functionality!
+
+## Limitations:
+The Govee API has a few limitations:
+1. 10,000 API requests per day
+2. 10 API requests per minute
+
+I have added individual 60-second cooldowns for each command, this ensures that you shouldn't get anywhere near the rate limit within a minute or day. This of course can be changed in the `main.py` file, but I highly recommend that you don't.
