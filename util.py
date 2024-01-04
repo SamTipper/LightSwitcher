@@ -1,19 +1,27 @@
+import configparser
+from pathlib import Path
 from datetime import datetime
+from discord.ext import commands
 
 
 def time_check(business_hours_start, business_hours_end):
-    def decorator(func):
-        async def wrapper(ctx, *args, **kwargs):
-            current_hour = datetime.now().hour
-            print(type(current_hour))
+    async def predicate(ctx):
+        current_hour = datetime.now().hour
 
-            if current_hour in range(business_hours_start, business_hours_end + 1):
-                await func(ctx, *args, **kwargs)
-            else:
-                await ctx.respond(
-                    f"Business hours are from {business_hours_start} to {business_hours_end}."
-                )
+        if business_hours_start <= current_hour <= business_hours_end:
+            return True
 
-        return wrapper
+        else:
+            await ctx.respond(
+                f"Business hours are from {business_hours_start}:00 to {business_hours_end}:00, please try again later."
+            )
+            return False
 
-    return decorator
+    return commands.check(predicate)
+
+
+def load_settings() -> dict:
+    config = configparser.ConfigParser()
+    config.read(Path('./config.ini'))
+
+    return {setting: value for setting, value in config['Settings'].items()}
