@@ -1,27 +1,32 @@
-import configparser
+from configparser import ConfigParser
 from pathlib import Path
 from datetime import datetime
 from discord.ext import commands
 
 
-def time_check(business_hours_start, business_hours_end):
+def time_check(start_time, end_time):
     async def predicate(ctx):
+
+        if start_time == end_time:
+            return True
+
         current_hour = datetime.now().hour
 
-        if business_hours_start <= current_hour <= business_hours_end:
+        if start_time <= current_hour <= end_time:
             return True
 
         else:
             await ctx.respond(
-                f"Business hours are from {business_hours_start}:00 to {business_hours_end}:00, please try again later."
+                f"Business hours are from {start_time}:00 to {end_time}:00, please try again later."
             )
             return False
 
+    start_time, end_time = int(start_time), int(end_time)
     return commands.check(predicate)
 
 
 def load_settings() -> dict:
-    config = configparser.ConfigParser()
-    config.read(Path('./config.ini'))
+    config = ConfigParser()
+    config.read(Path("./config.ini"))
 
-    return {setting: value for setting, value in config['Settings'].items()}
+    return {setting: value for setting, value in config["Settings"].items()}

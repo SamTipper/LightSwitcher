@@ -53,6 +53,13 @@ def create_env_file(api_key: str, bot_token: str, chosen_device: dict) -> None:
         env_file.write(env_data)
 
 
+def create_ini_file() -> None:
+    ini_data = f"[Settings]\nstart_time = 00\nend_time = 00\ncooldown_ceil = 1\ncommand_cooldown = 60"
+
+    with open(Path("./config.ini"), "w") as config_file:
+        config_file.write(ini_data)
+
+
 def main() -> None:
     api_key, bot_token = get_tokens()
     filtered_devices = get_devices(api_key)
@@ -75,6 +82,7 @@ def main() -> None:
         chosen_device = list_devices(filtered_devices)
 
     create_env_file(api_key, bot_token, chosen_device)
+    create_ini_file()
 
     print(
         textwrap.dedent(
@@ -85,7 +93,7 @@ def main() -> None:
             """
         )
     )
-    print('.env file created and setup is complete. Please run "main.py" to begin.')
+    print('.env and config files created and setup is complete. Please run "main.py" to begin.')
 
 
 if __name__ == "__main__":
