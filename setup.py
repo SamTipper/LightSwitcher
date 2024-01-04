@@ -1,4 +1,5 @@
 import requests
+import textwrap
 from pathlib import Path
 
 
@@ -74,7 +75,17 @@ def main() -> None:
         chosen_device = list_devices(filtered_devices)
 
     create_env_file(api_key, bot_token, chosen_device)
+
     print('.env file created and setup is complete. Please run "main.py" to begin.\n')
+    print(
+        textwrap.dedent(
+            """
+            DISCLAIMER: PLEASE DO NOT SHARE YOUR GOVEE API KEY, DISCORD BOT TOKEN,
+            OR YOUR .ENV FILE WITH ANYONE. I AM NOT RESPONSIBLE FOR ANYTHING THAT
+            HAPPENS AFTER BREACHING THIS DISCLAIMER.
+            """
+        )
+    )
 
 
 if __name__ == "__main__":
