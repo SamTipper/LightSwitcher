@@ -5,7 +5,10 @@
 ### DISCLAIMER: PLEASE DO NOT SHARE YOUR GOVEE API KEY, DISCORD BOT TOKEN, OR YOUR .ENV FILE WITH ANYONE. I AM NOT RESPONSIBLE FOR ANYTHING THAT HAPPENS AFTER BREACHING THIS DISCLAIMER.
 **Make sure you have your Govee API key and you have created a discord bot. Keep both your API key and Discord bot token handy.**
 
-1. Clone the repository, create a virtual environment, and activate it. `python -m venv ./` | `source activate`
+1. Clone the repository, create a virtual environment, and activate it.
+   - Windows `python -m venv ./` | `source activate`
+   - Linux/OSX `python -m venv ./` | `source ./bin/activate`
+
 2. Install the requirements. `pip install -r requirements.txt`
 3. Run the `setup.py` script, you will need to enter your Govee API key and Discord bot token immediately, so get them both ready.
 4. Once the setup script is complete and has created your .env file, you can run `main.py` script and your bot should be ready to go!
