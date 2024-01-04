@@ -37,9 +37,9 @@ I plan to add more commands in the future, feel free to contribute to this proje
 Once you run the setup, the `config.ini` file will be made. You don't need to touch this file but you can if you aren't happy with a few of the program's behaviours.
 
 ### All Configurable Settings:
-- **start_time** (INTEGER): The initial time of day when the program will accept commands. It accepts integers that are 1 or 2 characters in length.
+- **start_time** (INTEGER): The initial time of day when the program will accept commands. It accepts integers that are 1 or 2 characters in length, representing the hour in a day.
 
-- **end_time** (INTEGER): The final time of day when the program will accept commands. It accepts integers that are 1 or 2 characters in length.
+- **end_time** (INTEGER): The final time of day when the program will accept commands. It accepts integers that are 1 or 2 characters in length, representing the hour in a day.
 
 - **cooldown_ceil** (INTEGER): The maximum number of times commands can be used before the cooldown is triggered (global).
 
