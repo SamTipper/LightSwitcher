@@ -36,7 +36,7 @@ I plan to add more commands in the future, feel free to contribute to this proje
 ## Config:
 Once you run the setup, the `config.ini` file will be made. You don't need to touch this file but you can if you aren't happy with a few of the program's behaviours.
 
-# All Configurable Settings:
+### All Configurable Settings:
 - **start_time** (INTEGER): The initial time of day when the program will accept commands. It accepts integers that are 1 or 2 characters in length.
 
 - **end_time** (INTEGER): The final time of day when the program will accept commands. It accepts integers that are 1 or 2 characters in length.
