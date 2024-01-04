@@ -40,7 +40,7 @@ def colour_change_body(
     elif rgb:
         R, G, B = rgb
 
-        if all(rgb) == 0:
+        if all(colour == 0 for colour in rgb):
             cmd = {"name": "turn", "value": "off"}
         else:
             cmd = {"name": "color", "value": {"r": R, "g": G, "b": B}}
