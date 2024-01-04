@@ -29,7 +29,7 @@ def get_devices(api_key: str) -> list | None:
 
 
 def list_devices(filtered_devices: list) -> dict | None:
-    print("\nPlease type the number of device you would like to control:\n")
+    print("Please type the number of device you would like to control:\n")
 
     for index, device in enumerate(filtered_devices):
         print(f"{index}: {device['deviceName']}")
@@ -59,7 +59,7 @@ def main() -> None:
 
     if not filtered_devices:
         print(
-            "No devices associated to your API key found... Please make sure your light is properly set up, or address error messages if you have any. PROGRAM TERMINATING...\n"
+            "No devices associated to your API key found... Please make sure your light is properly set up, or address error messages if you have any. PROGRAM TERMINATING..."
         )
         return
 
@@ -67,16 +67,15 @@ def main() -> None:
         chosen_device = list_devices(filtered_devices)
 
     else:
-        print("Only one device found, it has been automatically chosen.\n")
+        print("Only one device found, it has been automatically chosen.")
         chosen_device = filtered_devices[0]
 
     while chosen_device == None:
-        print("Invalid selection, please try again.\n")
+        print("Invalid selection, please try again.")
         chosen_device = list_devices(filtered_devices)
 
     create_env_file(api_key, bot_token, chosen_device)
 
-    print('.env file created and setup is complete. Please run "main.py" to begin.\n')
     print(
         textwrap.dedent(
             """
@@ -86,6 +85,7 @@ def main() -> None:
             """
         )
     )
+    print('.env file created and setup is complete. Please run "main.py" to begin.')
 
 
 if __name__ == "__main__":

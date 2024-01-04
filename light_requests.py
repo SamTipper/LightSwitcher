@@ -68,7 +68,7 @@ def brightness_change_body(device_mac: str, model_num: str, brightness: int) -> 
     return request_body
 
 
-def PUT(api_key: str, request_body: str) -> bool:
+def PUT(api_key: str, request_body: dict) -> bool:
     params = {"Govee-API-Key": api_key, "Content-Type": "application/json"}
 
     request = requests.put(
