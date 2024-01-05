@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+from os import path
 from pathlib import Path
 from datetime import datetime
 from discord.ext import commands
@@ -30,3 +31,8 @@ def load_settings() -> dict:
     config.read(Path("./config.ini"))
 
     return {setting: value for setting, value in config["Settings"].items()}
+
+
+def check_for_config_files() -> bool:
+    existing_paths = [path.exists(Path('./.env')), path.exists(Path('./config.ini'))]
+    return all(existing_paths)

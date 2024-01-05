@@ -4,11 +4,16 @@ from dotenv import load_dotenv
 from os import environ
 
 import light_requests
-from util import time_check, load_settings
+from util import time_check, load_settings, check_for_config_files
 
 load_dotenv()
-settings = load_settings()
 
+if not check_for_config_files():
+    raise RuntimeError(
+        "Important config files are missing, please run setup.py first to generate them and then run main.py."
+    )
+
+SETTINGS = load_settings()
 API_KEY = environ["API_KEY"]
 MAC_ADDR = environ["DEVICE_MAC"]
 MODEL_NUM = environ["DEVICE_MODEL_NUM"]
@@ -24,9 +29,9 @@ async def on_application_command_error(ctx, error):
         await ctx.respond(error)
 
 
-@time_check(settings['start_time'], settings['end_time'])
+@time_check(SETTINGS['start_time'], SETTINGS['end_time'])
 @client.slash_command()
-@cooldown(settings['cooldown_ceil'], settings['command_cooldown'], BucketType.guild)
+@cooldown(SETTINGS['cooldown_ceil'], SETTINGS['command_cooldown'], BucketType.guild)
 async def setcolour(ctx, colour):
     request_body = light_requests.colour_change_body(
         MAC_ADDR, MODEL_NUM, colour=colour.lower()
@@ -49,9 +54,9 @@ async def setcolour(ctx, colour):
         )
 
 
-@time_check(settings['start_time'], settings['end_time'])
+@time_check(SETTINGS['start_time'], SETTINGS['end_time'])
 @client.slash_command()
-@cooldown(settings['cooldown_ceil'], settings['command_cooldown'], BucketType.guild)
+@cooldown(SETTINGS['cooldown_ceil'], SETTINGS['command_cooldown'], BucketType.guild)
 async def setrgb(ctx, r, g, b):
     if not r.strip().isdigit() or not g.strip().isdigit() or not b.strip().isdigit():
         await ctx.respond("Please enter numerical values.")
@@ -74,9 +79,9 @@ async def setrgb(ctx, r, g, b):
         )
 
 
-@time_check(settings['start_time'], settings['end_time'])
+@time_check(SETTINGS['start_time'], SETTINGS['end_time'])
 @client.slash_command()
-@cooldown(settings['cooldown_ceil'], settings['command_cooldown'], BucketType.guild)
+@cooldown(SETTINGS['cooldown_ceil'], SETTINGS['command_cooldown'], BucketType.guild)
 async def setbrightness(ctx, brightness):
     if not brightness.strip().replace("%", "").isdigit():
         await ctx.respond("The brightness value must be a number.")
