@@ -30,6 +30,7 @@ If you spot any bugs or anything that seems wrong, please feel free to raise an 
 1. `/setcolour [colour]`
 2. `/setrgb [r], [g], [b]`
 3. `/setbrightness [1-100]`
+4. `/allcolours`
 
 I plan to add more commands in the future, feel free to contribute to this project to bulk out its functionality!
 
