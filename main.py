@@ -6,12 +6,12 @@ from os import environ
 import light_requests
 from util import time_check, load_settings, check_for_config_files
 
-load_dotenv()
-
 if not check_for_config_files():
     raise RuntimeError(
         "Important config files are missing, please run setup.py first to generate them and then run main.py."
     )
+
+load_dotenv()
 
 SETTINGS = load_settings()
 API_KEY = environ["API_KEY"]
