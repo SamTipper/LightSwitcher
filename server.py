@@ -1,0 +1,48 @@
+from flask import Flask, request, Response
+from threading import Thread
+from rx.subject import Subject
+from json import dumps
+
+app = Flask(__name__)
+
+command_status_subject: Subject = Subject()
+command_status = False
+
+
+@app.route("/")
+def home() -> str:
+    return ""
+
+
+@app.route("/toggle", methods=['GET'])
+def toggle_commands() -> None:
+    try:
+        global command_status_subject, command_status
+        command_status = not command_status
+        command_status_subject.on_next(command_status)
+        return Response(
+            response=dumps({
+                "status": "on" if command_status == True else "off"
+            }),
+            status=200,
+            mimetype="application/json"
+        )
+   
+    except Exception as e:
+        print(e)
+        return 500
+
+
+def run() -> None:
+  app.run(host='0.0.0.0', port=21435)
+  print(f"Server running on http://{request.host}")
+
+
+def keep_alive() -> None:
+    try:
+        app_thread = Thread(target=run)
+        app_thread.daemon = True
+        app_thread.start()
+
+    except Exception as e:
+        print("Tried to start API but failed", e)

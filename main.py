@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from os import environ
 
 import light_requests
-from util import time_check, load_settings, check_for_config_files
+from util import *
+from server import command_status_subject
 
 if not check_for_config_files():
     raise RuntimeError(
@@ -19,8 +20,17 @@ MAC_ADDR = environ["DEVICE_MAC"]
 MODEL_NUM = environ["DEVICE_MODEL_NUM"]
 BOT_TOKEN = environ["BOT_TOKEN"]
 
+commands_paused = False
 intents = discord.Intents.default()
 client = discord.Bot(intents=intents)
+
+# Check if user wants to use the API and launch if true
+check_and_launch_server(SETTINGS["use_server"].strip().lower() == "true")
+
+
+def on_next(val) -> bool:
+   global commands_paused
+   commands_paused = val
 
 
 @client.event
@@ -115,5 +125,5 @@ async def allcolours(ctx):
 async def on_ready():
     print(f"We have logged in as {client.user}")
 
-
+command_status_subject.subscribe(on_next)
 client.run(BOT_TOKEN)

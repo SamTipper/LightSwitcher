@@ -3,6 +3,7 @@ from os import path
 from pathlib import Path
 from datetime import datetime
 from discord.ext import commands
+import server
 
 
 def time_check(start_time, end_time):
@@ -36,3 +37,11 @@ def load_settings() -> dict:
 def check_for_config_files() -> bool:
     existing_paths = [path.exists(Path('./.env')), path.exists(Path('./config.ini'))]
     return all(existing_paths)
+
+
+def check_and_launch_server(using_server: bool) -> None:
+    if not using_server:
+        return None
+    else:
+        server.keep_alive()
+        
