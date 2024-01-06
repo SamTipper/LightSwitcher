@@ -15,7 +15,7 @@ def home() -> str:
 
 
 @app.route("/toggle", methods=['GET'])
-def toggle_commands() -> None:
+def toggle_commands() -> Response:
     try:
         global command_status_subject, command_allowed
         command_allowed = not command_allowed
@@ -31,7 +31,14 @@ def toggle_commands() -> None:
    
     except Exception as e:
         print(e)
-        return 500
+        return Response(
+            response=dumps({
+                "message": "There was an error while toggling commands",
+                "error": e
+            }),
+            status=500,
+            mimetype="application/json"
+        )
 
 
 def run() -> None:
