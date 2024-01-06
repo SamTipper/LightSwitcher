@@ -3,10 +3,17 @@ from os import path
 from pathlib import Path
 from datetime import datetime
 from discord.ext import commands
+import server
 
 
-def time_check(start_time, end_time):
+def can_alter_lights(start_time, end_time, commands_allowed):
     async def predicate(ctx):
+
+        if not commands_allowed():
+            await ctx.respond(
+                "The host has currently disabled the ability to change or alter the lights. Please try again later when this functionality is enabled."
+            )
+            return False
 
         if start_time == end_time:
             return True
@@ -36,3 +43,10 @@ def load_settings() -> dict:
 def check_for_config_files() -> bool:
     existing_paths = [path.exists(Path('./.env')), path.exists(Path('./config.ini'))]
     return all(existing_paths)
+
+
+def check_and_launch_server(using_server: bool, server_port: str) -> None:
+    if not using_server:
+        return None
+    else:
+        server.keep_alive(server_port)

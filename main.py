@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from os import environ
 
 import light_requests
-from util import time_check, load_settings, check_for_config_files
+from util import *
+from server import command_status_subject
 
 if not check_for_config_files():
     raise RuntimeError(
@@ -19,8 +20,17 @@ MAC_ADDR = environ["DEVICE_MAC"]
 MODEL_NUM = environ["DEVICE_MODEL_NUM"]
 BOT_TOKEN = environ["BOT_TOKEN"]
 
+commands_allowed = True
 intents = discord.Intents.default()
 client = discord.Bot(intents=intents)
+
+# Check if user wants to use the API and launch if true
+check_and_launch_server(SETTINGS["use_server"].strip().lower() == "true", SETTINGS["server_port"])
+
+
+def on_next(val) -> bool:
+   global commands_allowed
+   commands_allowed = val
 
 
 @client.event
@@ -29,7 +39,7 @@ async def on_application_command_error(ctx, error):
         await ctx.respond(error)
 
 
-@time_check(SETTINGS['start_time'], SETTINGS['end_time'])
+@can_alter_lights(SETTINGS['start_time'], SETTINGS['end_time'], lambda: commands_allowed)
 @client.slash_command()
 @cooldown(SETTINGS['cooldown_ceil'], SETTINGS['command_cooldown'], BucketType.guild)
 async def setcolour(ctx, colour):
@@ -54,7 +64,7 @@ async def setcolour(ctx, colour):
         )
 
 
-@time_check(SETTINGS['start_time'], SETTINGS['end_time'])
+@can_alter_lights(SETTINGS['start_time'], SETTINGS['end_time'], lambda: commands_allowed)
 @client.slash_command()
 @cooldown(SETTINGS['cooldown_ceil'], SETTINGS['command_cooldown'], BucketType.guild)
 async def setrgb(ctx, r, g, b):
@@ -79,7 +89,7 @@ async def setrgb(ctx, r, g, b):
         )
 
 
-@time_check(SETTINGS['start_time'], SETTINGS['end_time'])
+@can_alter_lights(SETTINGS['start_time'], SETTINGS['end_time'], lambda: commands_allowed)
 @client.slash_command()
 @cooldown(SETTINGS['cooldown_ceil'], SETTINGS['command_cooldown'], BucketType.guild)
 async def setbrightness(ctx, brightness):
@@ -115,5 +125,5 @@ async def allcolours(ctx):
 async def on_ready():
     print(f"We have logged in as {client.user}")
 
-
+command_status_subject.subscribe(on_next)
 client.run(BOT_TOKEN)

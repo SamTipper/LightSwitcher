@@ -46,6 +46,15 @@ Once you run the setup, the `config.ini` file will be made. You don't need to to
 
 - **command_cooldown** (INTEGER): The duration of a command cooldown in seconds (global).
 
+- **use_server** (BOOLEAN): Tells the script whether to run a small Flask web-server that allows you to pause and un-pause light alteration requests. Read more about this in the "Server" section.
+
+- **server_port** (INTEGER): Configures the port the server will use if the `use_server` setting is `true`.
+
+## Server:
+By default, the config file has `use_server` set to `false`. When you set this to setting to `true`, the script will launch a Flask-based API on a seperate thread that will listen for HTTP requests.
+
+There is currently one endpoint that you can use that does anything at the moment `http://server.ip:port/toggle` allows you to toggle all incoming light change commands on and off. It's as simple as just sending a get request to the endpoint and it handles the rest! It will send you a response body that tells you if the setting is toggled on or off.
+
 ## Limitations:
 The Govee API has a few limitations:
 1. 10,000 API requests per day.
