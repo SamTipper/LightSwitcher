@@ -41,14 +41,21 @@ def toggle_commands() -> Response:
         )
 
 
-def run() -> None:
-  app.run(host='0.0.0.0', port=21435)
+def run(port: int) -> None:
+  app.run(host='0.0.0.0', port=port)
   print(f"Server running on http://{request.host}")
 
 
-def keep_alive() -> None:
+def keep_alive(port: str) -> None:
+
+    if not port.strip().isdigit():
+        raise RuntimeError(
+            "The \"server_port\" setting in the config.ini file is not a valid integer, please change it and try again."
+        )
+
     try:
-        app_thread = Thread(target=run)
+        port = int(port)
+        app_thread = Thread(target=run, args=(port,))
         app_thread.daemon = True
         app_thread.start()
 
