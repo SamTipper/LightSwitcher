@@ -45,8 +45,8 @@ def check_for_config_files() -> bool:
     return all(existing_paths)
 
 
-def check_and_launch_server(using_server: bool, server_port: str) -> None:
+def check_and_launch_server(using_server: bool, server_port: str, api_key: str) -> None:
     if not using_server:
         return None
     else:
-        server.keep_alive(server_port)
+        server.keep_alive(server_port, api_key)

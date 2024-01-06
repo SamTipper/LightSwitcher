@@ -1,6 +1,7 @@
 import requests
 import textwrap
 from pathlib import Path
+from secrets import token_hex
 
 
 def get_tokens() -> str:
@@ -54,7 +55,8 @@ def create_env_file(api_key: str, bot_token: str, chosen_device: dict) -> None:
 
 
 def create_ini_file() -> None:
-    ini_data = "[Settings]\nstart_time = 00\nend_time = 00\ncooldown_ceil = 1\ncommand_cooldown = 60\nuse_server = false\nserver_port = 8000"
+    api_key = token_hex(16)
+    ini_data = f"[Settings]\nstart_time = 00\nend_time = 00\ncooldown_ceil = 1\ncommand_cooldown = 60\nuse_server = false\nserver_port = 8000\napi_key = {api_key}"
 
     with open(Path("./config.ini"), "w") as config_file:
         config_file.write(ini_data)

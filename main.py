@@ -25,7 +25,7 @@ intents = discord.Intents.default()
 client = discord.Bot(intents=intents)
 
 # Check if user wants to use the API and launch if true
-check_and_launch_server(SETTINGS["use_server"].strip().lower() == "true", SETTINGS["server_port"])
+check_and_launch_server(SETTINGS["use_server"].strip().lower() == "true", SETTINGS["server_port"], SETTINGS["api_key"])
 
 
 def on_next(val) -> bool:
