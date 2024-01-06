@@ -34,7 +34,7 @@ def toggle_commands() -> Response:
         return Response(
             response=dumps({
                 "message": "There was an error while toggling commands",
-                "error": e
+                "error": str(e)
             }),
             status=500,
             mimetype="application/json"
