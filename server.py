@@ -6,7 +6,7 @@ from json import dumps
 app = Flask(__name__)
 
 command_status_subject: Subject = Subject()
-command_status = False
+command_allowed = True
 
 
 @app.route("/")
@@ -17,12 +17,13 @@ def home() -> str:
 @app.route("/toggle", methods=['GET'])
 def toggle_commands() -> None:
     try:
-        global command_status_subject, command_status
-        command_status = not command_status
-        command_status_subject.on_next(command_status)
+        global command_status_subject, command_allowed
+        command_allowed = not command_allowed
+        command_status_subject.on_next(command_allowed)
+        
         return Response(
             response=dumps({
-                "status": "on" if command_status == True else "off"
+                "status": "on" if command_allowed == True else "off"
             }),
             status=200,
             mimetype="application/json"

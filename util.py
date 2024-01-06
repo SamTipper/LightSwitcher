@@ -6,8 +6,14 @@ from discord.ext import commands
 import server
 
 
-def time_check(start_time, end_time):
+def can_alter_lights(start_time, end_time, commands_allowed):
     async def predicate(ctx):
+
+        if not commands_allowed():
+            await ctx.respond(
+                "The host has currently disabled the ability to change or alter the lights. Please try again later when this functionality is enabled."
+            )
+            return False
 
         if start_time == end_time:
             return True
@@ -44,4 +50,3 @@ def check_and_launch_server(using_server: bool) -> None:
         return None
     else:
         server.keep_alive()
-        
