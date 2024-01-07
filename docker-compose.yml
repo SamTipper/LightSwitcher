@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+
+  light_switcher:
+
+    image: light_switcher
+    build:
+      dockerfile: ./Dockerfile
+      context: .
