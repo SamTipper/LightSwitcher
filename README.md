@@ -2,7 +2,7 @@
 *A discord bot that changes the colour of your Govee light.*
 
 ## Setup:
-### DISCLAIMER: PLEASE DO NOT SHARE YOUR GOVEE API KEY, DISCORD BOT TOKEN, OR YOUR .ENV FILE WITH ANYONE. I AM NOT RESPONSIBLE FOR ANYTHING THAT HAPPENS AFTER BREACHING THIS DISCLAIMER.
+### DISCLAIMER: PLEASE DO NOT SHARE YOUR GOVEE API KEY, DISCORD BOT TOKEN, .ENV FILE, OR YOUR CONFIG FILE WITH ANYONE. I AM NOT RESPONSIBLE FOR ANYTHING THAT HAPPENS AFTER BREACHING THIS DISCLAIMER.
 **Make sure you have your Govee API key and you have created a discord bot. Keep both your API key and Discord bot token handy.**
 
 1. Clone the repository, create a virtual environment, and activate it.
