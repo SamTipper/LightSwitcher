@@ -29,7 +29,7 @@ client = discord.Bot(intents=intents)
 check_and_launch_server(SETTINGS["use_server"].strip().lower() == "true", SETTINGS["server_port"], SETTINGS["api_key"])
 
 
-async def change_activity() -> str:
+async def change_activity() -> None:
     if commands_allowed:
         await client.change_presence(activity=discord.Game(name="Accepting Commands"))
     else:
