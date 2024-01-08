@@ -7,6 +7,7 @@ from asyncio import run
 import light_requests
 from util import *
 from server import command_status_subject
+from logger import Logger
 
 if not check_for_config_files():
     raise RuntimeError(
@@ -15,31 +16,40 @@ if not check_for_config_files():
 
 load_dotenv()
 
+# Loading settings
 SETTINGS = load_settings()
 API_KEY = environ["API_KEY"]
 MAC_ADDR = environ["DEVICE_MAC"]
 MODEL_NUM = environ["DEVICE_MODEL_NUM"]
 BOT_TOKEN = environ["BOT_TOKEN"]
 
+# Instantiating logger and Discord client
+logger = Logger(__name__, SETTINGS["logging_level"])
 commands_allowed = True
 intents = discord.Intents.default()
 client = discord.Bot(intents=intents)
 
 # Check if user wants to use the API and launch if true
-check_and_launch_server(SETTINGS["use_server"].strip().lower() == "true", SETTINGS["server_port"], SETTINGS["api_key"])
+check_and_launch_server(
+    SETTINGS["use_server"].strip().lower() == "true",
+    SETTINGS["server_port"],
+    SETTINGS["api_key"],
+)
 
 
 async def change_activity() -> None:
     if commands_allowed:
         await client.change_presence(activity=discord.Game(name="Accepting Commands"))
     else:
-        await client.change_presence(activity=discord.Game(name="Not accepting commands."))
+        await client.change_presence(
+            activity=discord.Game(name="Not accepting commands.")
+        )
 
 
 def on_next(val) -> bool:
-   global commands_allowed
-   commands_allowed = val
-   run(change_activity())
+    global commands_allowed
+    commands_allowed = val
+    run(change_activity())
 
 
 @client.event
@@ -48,9 +58,9 @@ async def on_application_command_error(ctx, error):
         await ctx.respond(error)
 
 
-@can_alter_lights(SETTINGS['start_time'], SETTINGS['end_time'], lambda: commands_allowed)
+@can_alter_lights(SETTINGS["start_time"], SETTINGS["end_time"], lambda: commands_allowed)
 @client.slash_command()
-@cooldown(SETTINGS['cooldown_ceil'], SETTINGS['command_cooldown'], BucketType.guild)
+@cooldown(SETTINGS["cooldown_ceil"], SETTINGS["command_cooldown"], BucketType.guild)
 async def setcolour(ctx, colour):
     request_body = light_requests.colour_change_body(
         MAC_ADDR, MODEL_NUM, colour=colour.lower()
@@ -73,9 +83,9 @@ async def setcolour(ctx, colour):
         )
 
 
-@can_alter_lights(SETTINGS['start_time'], SETTINGS['end_time'], lambda: commands_allowed)
+@can_alter_lights(SETTINGS["start_time"], SETTINGS["end_time"], lambda: commands_allowed)
 @client.slash_command()
-@cooldown(SETTINGS['cooldown_ceil'], SETTINGS['command_cooldown'], BucketType.guild)
+@cooldown(SETTINGS["cooldown_ceil"], SETTINGS["command_cooldown"], BucketType.guild)
 async def setrgb(ctx, r, g, b):
     if not r.strip().isdigit() or not g.strip().isdigit() or not b.strip().isdigit():
         await ctx.respond("Please enter numerical values.")
@@ -98,9 +108,9 @@ async def setrgb(ctx, r, g, b):
         )
 
 
-@can_alter_lights(SETTINGS['start_time'], SETTINGS['end_time'], lambda: commands_allowed)
+@can_alter_lights(SETTINGS["start_time"], SETTINGS["end_time"], lambda: commands_allowed)
 @client.slash_command()
-@cooldown(SETTINGS['cooldown_ceil'], SETTINGS['command_cooldown'], BucketType.guild)
+@cooldown(SETTINGS["cooldown_ceil"], SETTINGS["command_cooldown"], BucketType.guild)
 async def setbrightness(ctx, brightness):
     if not brightness.strip().replace("%", "").isdigit():
         await ctx.respond("The brightness value must be a number.")
@@ -134,6 +144,7 @@ async def allcolours(ctx):
 async def on_ready():
     await change_activity()
     print(f"We have logged in as {client.user}")
+
 
 command_status_subject.subscribe(on_next)
 client.run(BOT_TOKEN)
