@@ -2,6 +2,7 @@ import discord
 from discord.ext.commands import cooldown, BucketType, CommandOnCooldown
 from dotenv import load_dotenv
 from os import environ
+from asyncio import run
 
 import light_requests
 from util import *
@@ -28,9 +29,17 @@ client = discord.Bot(intents=intents)
 check_and_launch_server(SETTINGS["use_server"].strip().lower() == "true", SETTINGS["server_port"], SETTINGS["api_key"])
 
 
+def determine_activity_text() -> str:
+    if commands_allowed:
+        return "Accepting commands."
+    else:
+        return "Not accepting commands."
+
+
 def on_next(val) -> bool:
    global commands_allowed
    commands_allowed = val
+   run(client.change_presence(activity=discord.ActivityType.custom, name=determine_activity_text()))
 
 
 @client.event
@@ -123,6 +132,7 @@ async def allcolours(ctx):
 
 @client.event
 async def on_ready():
+    await client.change_presence(activity=discord.ActivityType.custom, name=determine_activity_text())
     print(f"We have logged in as {client.user}")
 
 command_status_subject.subscribe(on_next)
