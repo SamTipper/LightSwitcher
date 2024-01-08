@@ -29,17 +29,17 @@ client = discord.Bot(intents=intents)
 check_and_launch_server(SETTINGS["use_server"].strip().lower() == "true", SETTINGS["server_port"], SETTINGS["api_key"])
 
 
-def determine_activity_text() -> str:
+async def change_activity() -> str:
     if commands_allowed:
-        return "Accepting commands."
+        await client.change_presence(activity=discord.Activity(name="Accepting Commands"))
     else:
-        return "Not accepting commands."
+        await client.change_presence(activity=discord.Activity(name="Not accepting commands."))
 
 
 def on_next(val) -> bool:
    global commands_allowed
    commands_allowed = val
-   run(client.change_presence(activity=discord.Activity(type=discord.ActivityType.custom, name=determine_activity_text())))
+   run(change_activity())
 
 
 @client.event
@@ -132,7 +132,7 @@ async def allcolours(ctx):
 
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.custom, name=determine_activity_text()))
+    await change_activity()
     print(f"We have logged in as {client.user}")
 
 command_status_subject.subscribe(on_next)
