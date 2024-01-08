@@ -31,9 +31,9 @@ check_and_launch_server(SETTINGS["use_server"].strip().lower() == "true", SETTIN
 
 async def change_activity() -> str:
     if commands_allowed:
-        await client.change_presence(activity=discord.Activity(name="Accepting Commands"))
+        await client.change_presence(activity=discord.Game(name="Accepting Commands"))
     else:
-        await client.change_presence(activity=discord.Activity(name="Not accepting commands."))
+        await client.change_presence(activity=discord.Game(name="Not accepting commands."))
 
 
 def on_next(val) -> bool:
