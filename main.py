@@ -7,7 +7,7 @@ from asyncio import run
 import light_requests
 from util import *
 from server import command_status_subject
-from logger import Logger
+from logger import Logger, LoggingLevel
 
 if not check_for_config_files():
     raise RuntimeError(
@@ -26,14 +26,19 @@ BOT_TOKEN = environ["BOT_TOKEN"]
 # Instantiating logger and Discord client
 logger = Logger(__name__, SETTINGS["logging_level"])
 commands_allowed = True
+logger.log("Settings and logger loaded.", LoggingLevel.DEBUG)
+
 intents = discord.Intents.default()
 client = discord.Bot(intents=intents)
+logger.log("Discord client instantiated.", LoggingLevel.DEBUG)
+
 
 # Check if user wants to use the API and launch if true
 check_and_launch_server(
     SETTINGS["use_server"].strip().lower() == "true",
     SETTINGS["server_port"],
     SETTINGS["api_key"],
+    logger
 )
 
 

@@ -3,7 +3,9 @@ from os import path
 from pathlib import Path
 from datetime import datetime
 from discord.ext import commands
+
 import server
+from logger import Logger
 
 
 def can_alter_lights(start_time, end_time, commands_allowed):
@@ -45,8 +47,8 @@ def check_for_config_files() -> bool:
     return all(existing_paths)
 
 
-def check_and_launch_server(using_server: bool, server_port: str, api_key: str) -> None:
+def check_and_launch_server(using_server: bool, server_port: str, api_key: str, logger: Logger) -> None:
     if not using_server:
         return None
     else:
-        server.keep_alive(server_port, api_key)
+        server.keep_alive(server_port, api_key, logger)

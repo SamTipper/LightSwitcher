@@ -46,6 +46,8 @@ Once you run the setup, the `config.ini` file will be made. You don't need to to
 
 - **command_cooldown** (INTEGER): The duration of a command cooldown in seconds (global).
 
+- **logging_level** (INTEGER): The level of logging 0-4 (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+
 - **use_server** (BOOLEAN): Tells the script whether to run a small Flask web-server that allows you to pause and un-pause light alteration requests. Read more about this in the "Server" section.
 
 - **server_port** (INTEGER): Configures the port the server will use if the `use_server` setting is `true`.
