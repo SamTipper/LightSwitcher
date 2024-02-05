@@ -3,10 +3,11 @@ from os import path
 from pathlib import Path
 from datetime import datetime
 from discord.ext import commands
+from typing import Callable
 import server
 
 
-def can_alter_lights(start_time, end_time, commands_allowed):
+def can_alter_lights(start_time: str, end_time: str, commands_allowed: Callable):
     async def predicate(ctx):
 
         if not commands_allowed():
