@@ -55,7 +55,7 @@ Once you run the setup, the `config.ini` file will be made. You don't need to to
 ## Server:
 By default, the config file has `use_server` set to `false`. When you set this to setting to `true`, the script will launch a Flask-based API on a seperate thread that will listen for HTTP requests.
 
-There is currently one endpoint that you can use that does anything at the moment `http://server.ip:port/toggle` allows you to toggle all incoming light change commands on and off. It's as simple as just sending a get request to the endpoint and it handles the rest! It will send you a response body that tells you if the setting is toggled on or off. You will receive an automatically generated API key in the config file, this can be changed if you are not happy with it. Alternatively, you can change it to `0` to tell the server that you don't want to use an API key, ommiting the `Authorization` header.
+There is currently one endpoint that you can use that does anything at the moment `http://ip:port/toggle` allows you to toggle all incoming light change commands on and off. It's as simple as just sending a get request to the endpoint and it handles the rest! It will send you a response body that tells you if the setting is toggled on or off. You will receive an automatically generated API key in the config file, this can be changed if you are not happy with it. Alternatively, you can change it to `0` to tell the server that you don't want to use an API key, ommiting the `Authorization` header.
 
 ## Limitations:
 The Govee API has a few limitations:
