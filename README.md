@@ -6,7 +6,7 @@
 **Make sure you have your Govee API key and you have created a discord bot. Keep both your API key and Discord bot token handy.**
 
 1. Clone the repository, create a virtual environment, and activate it.
-   - Windows `python -m venv ./` | `source activate`
+   - Windows `python -m venv ./` | `./Scripts/activate`
    - Linux/OSX `python -m venv ./` | `source ./bin/activate`
 
 2. Install the requirements. `pip install -r requirements.txt`
